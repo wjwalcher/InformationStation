@@ -8,6 +8,10 @@ req = urllib.request.Request(url)
 resp = urllib.request.urlopen(req)
 respData = resp.read()
 
-temperature = re.findall(r'<p class="myforecast-current-lrg">(.*?)</p>',str(respData))
+temperature = re.findall(r'<p class="myforecast-current-lrg">(.*?)</p>',str(respData)) 
+temperature = str(temperature)
 
-print(temperature)
+rep = re.sub(r'&deg;F', ' Degrees Farenheit', temperature, count=1)
+num = re.sub(r'&deg;F', 'Degrees', rep)
+
+print(num)
