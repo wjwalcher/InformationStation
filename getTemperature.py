@@ -40,10 +40,18 @@ def getStock(url):
     respStock = resp.read()
     stock = re.findall(r'<td class="wsod_last" nowrap="nowrap">(.*?)</td>',str(respStock)) 
     stock = str(stock)
-    rep = re.sub(r'<div class="wsod_quoteLabel">', ' ', stock, count=1)
-    rep = re.sub(r'</div">', ' ', stock, count=1)
+    rep = re.sub(r'<div class="wsod_quoteLabel">','' , stock, count=1)
+    rep = re.sub(r'</div>', ' ', rep, count=2)
+    rep = re.sub(r'<div class="wsod_quoteLabel">&nbsp;</div>', ' ', rep, count=1)
+    rep = re.sub(r'<div class="wsod_quoteLabel">&nbsp;', ' ', rep)
+    rep = re.sub(r',', "", rep)
+    company = re.findall(r'<h1 class="wsod_fLeft" style="margin-top:6px;">(.*?)</h1>', str(respStock))
+    company = str(company)
+    company = re.sub(r'<span class="wsod_smallSubHeading">(NASDAQ:AMZN)</span>', ' ', company)
+    company = str(company)
+    finalString = company + rep 
     #num = re.sub(r'&deg;F', 'Degrees', rep)
-    print(rep)    
+    print(finalString)    
     
 AmazonStockURL = "http://money.cnn.com/quote/quote.html?symb=AMZN"
     
