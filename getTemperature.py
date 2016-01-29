@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import urllib.request
 import re
+import serial
 
 def getWeather():
     urlWeather = 'http://forecast.weather.gov/MapClick.php?lat=44.97412689300046&lon=-93.50661848299967'
@@ -10,8 +11,8 @@ def getWeather():
     temperature = re.findall(r'<p class="myforecast-current-lrg">(.*?)</p>',str(respWeather)) 
     temperature = str(temperature)
     rep = re.sub(r'&deg;F', ' Degrees Farenheit', temperature, count=1)
-    num = re.sub(r'&deg;F', 'Degrees', rep)
-    print(num)
+    weather = re.sub(r'&deg;F', 'Degrees', rep)
+    return weather
 
 def getTime():
     urlTime = 'http://www.timeanddate.com/worldclock/usa/minneapolis'
@@ -20,7 +21,7 @@ def getTime():
     respTime = resp.read()
     time = re.findall(r'<span id=ct class=h1>(.*?)</span>',str(respTime)) 
     time = str(time)
-    print(time)    
+    return time  
     
 def getDate():
     urlDate = 'http://www.timeanddate.com/worldclock/usa/minneapolis'
@@ -31,7 +32,7 @@ def getDate():
     date = str(date)
     #rep = re.sub(r'&deg;F', ' Degrees Farenheit', temperature, count=1)
     #num = re.sub(r'&deg;F', 'Degrees', rep)
-    print(date) 
+    return date
 
 def getStock(url):
     urlStock = url
@@ -51,12 +52,17 @@ def getStock(url):
     company = str(company)
     finalString = company + rep 
     #num = re.sub(r'&deg;F', 'Degrees', rep)
-    print(finalString)    
+    return finalString   
     
 AmazonStockURL = "http://money.cnn.com/quote/quote.html?symb=AMZN"
+
+ser=serial.Serial('/dev/tty.usbmodem1d11', 9600)    
     
 while(True):
     getWeather()
     getDate()
     getTime()
-    getStock(AmazonStockURL)
+    #getStock(AmazonStockURL)
+    ser.write(time)
+    ser.write(date)
+    ser.write(weather)
